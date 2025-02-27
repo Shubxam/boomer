@@ -553,3 +553,86 @@ A command-line and Telegram-based bookmark management system that automatically 
 - **Computing Resources**: Local development with at least 8GB RAM, 4 cores
 
 This specification provides a comprehensive, step-by-step blueprint for building the Bookmark Manager, with carefully sized implementation steps that balance testability with meaningful progress.
+
+# Bookmark Manager Project Issues
+
+## Sprint 1: Foundation
+
+### Issue 1: Database Setup
+- Design database schema with tables for bookmarks, tags, and relationships
+- Implement SQLite connection management
+- Build bookmark CRUD operations
+- Create indexing and optimization
+
+### Issue 2: Basic CLI
+- Set up CLI framework using Click
+- Implement core commands (add, list, search)
+- Build output formatting with multiple display options
+
+### Issue 3: Simple Content Processing
+- Create URL handling with validation and normalization
+- Build metadata extraction from web pages
+- Add storage integration with duplicate detection
+
+## Sprint 2: Classification & Search
+
+### Issue 4: Tag System
+- Implement tag storage and management functions
+- Build tag-bookmark relationship management
+- Create tag commands in CLI interface
+
+### Issue 5: Basic Classification
+- Set up classification environment with transformer libraries
+- Implement basic classifier with text preprocessing
+- Connect classification to bookmarks with automatic tagging
+
+### Issue 6: Search Capabilities
+- Implement basic text search with relevance sorting
+- Add advanced filtering by tags and dates
+- Enhance CLI search commands with formatting options
+
+## Sprint 3: Import & Export
+
+### Issue 7: Browser Import
+- Create HTML parser for browser bookmark exports
+- Build import pipeline with duplicate detection
+- Add CLI import command with reporting
+
+### Issue 8: Plain Text Import
+- Implement URL extraction from plain text
+- Build metadata enhancement for extracted URLs
+- Connect text import to CLI interface
+
+### Issue 9: Export System
+- Create HTML export compatible with browsers
+- Build JSON export with filtering options
+- Add export commands to CLI
+
+## Sprint 4: Telegram Integration
+
+### Issue 10: Bot Setup
+- Create Telegram bot with BotFather
+- Implement user authentication system
+- Build command handlers for bot interaction
+
+### Issue 11: URL Processing
+- Create link detection from Telegram messages
+- Build asynchronous processing pipeline
+- Add batch handling for multiple URLs
+
+## Sprint 5: Advanced Features
+
+### Issue 13: Advanced Importers
+- Implement WhatsApp chat export parser
+- Build Telegram chat import functionality
+- Create unified import system with auto-detection
+
+### Issue 14: Enhanced Classification
+- Integrate advanced LLM (Phi-3 Mini or similar)
+- Implement semantic search with embeddings
+- Add confidence scoring for classifications
+
+### Issue 15: System Refinement
+- Perform system-wide performance optimization
+- Implement comprehensive error handling
+- Enhance user experience across all interfaces
