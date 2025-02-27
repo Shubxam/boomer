@@ -2,17 +2,17 @@
 
 ## Table of Contents
 
-1. Introduction
-2. Python Idiomatic Practices
-3. Version Control Guidelines
-4. Dependency Management with UV
-5. Code Quality Assurance
-6. Environment Configuration
-7. Logging
-8. Exception Handling
-9. Documentation
-10. Testing Strategy
-11. Security Best Practices
+1. [Introduction](#introduction)
+2. [Python Idiomatic Practices](#python-idiomatic-practices)
+3. [Version Control Guidelines](#version-control-guidelines)
+4. [Dependency Management with UV](#dependency-management-with-uv)
+5. [Code Quality Assurance](#code-quality-assurance)
+6. [Environment Configuration](#environment-configuration)
+7. [Logging](#logging)
+8. [Exception Handling](#exception-handling)
+9. [Documentation](#documentation)
+10. [Testing Strategy](#testing-strategy)
+11. [Security Best Practices](#security-best-practices)
 
 ## Introduction
 
@@ -230,124 +230,8 @@ uv sync --upgrade-package beautifulsoup4
 
 ## Code Quality Assurance
 
-### Ruff Configuration
-
-Use Ruff for linting and formatting:
-
-```toml
-# pyproject.toml
-[tool.ruff]
-target-version = "py310"
-line-length = 88
-select = [
-    "E",   # pycodestyle errors
-    "F",   # pyflakes
-    "B",   # flake8-bugbear
-    "I",   # isort
-    "C4",  # flake8-comprehensions
-    "EM",  # flake8-errmsg
-    "ICN", # flake8-import-conventions
-    "ISC", # flake8-implicit-str-concat
-    "N",   # pep8-naming
-    "RUF", # ruff-specific rules
-    "SIM", # flake8-simplify
-    "TID", # flake8-tidy-imports
-    "UP",  # pyupgrade
-]
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-line-ending = "auto"
-
-[tool.ruff.isort]
-known-first-party = ["bookmarkmanager"]
-```
-
-### Pre-commit Hooks
-
-Set up pre-commit hooks to ensure code quality before committing:
-
-```yaml
-# .pre-commit-config.yaml
-repos:
--   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.5
-    hooks:
-    -   id: ruff
-        args: [--fix]
-    -   id: ruff-format
-
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
-    hooks:
-    -   id: trailing-whitespace
-    -   id: end-of-file-fixer
-    -   id: check-yaml
-    -   id: check-toml
-    -   id: check-added-large-files
-    -   id: debug-statements
-
--   repo: https://github.com/python-poetry/poetry
-    rev: 1.5.1
-    hooks:
-    -   id: poetry-check
-
--   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.5.1
-    hooks:
-    -   id: mypy
-        additional_dependencies: [types-requests, types-PyYAML]
-```
-
-### Installation of pre-commit hooks
-
-```bash
-uv pip install pre-commit
-pre-commit install
-```
-
-### CI/CD Pipeline
-
-We use GitHub Actions for CI/CD:
-
-```yaml
-# .github/workflows/ci.yml
-name: CI
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    - name: Install dependencies
-      run: |
-        pip install uv
-        uv pip install -e ".[dev]"
-    - name: Lint with ruff
-      run: |
-        ruff check .
-        ruff format --check .
-    - name: Type check with mypy
-      run: |
-        mypy bookmarkmanager
-    - name: Test with pytest
-      run: |
-        pytest --cov=bookmarkmanager tests/
-    - name: Build documentation
-      run: |
-        mkdocs build --strict
-```
+- Use Ruff for linting and formatting
+- Set up pre-commit hooks to ensure code quality before committing
 
 ## Environment Configuration
 
@@ -396,12 +280,6 @@ def get_telegram_client():
     token = "1234567890:ABCdefGHIjklMNOpqrSTUvwxYZ"
     return TelegramClient(token)
 ```
-
-### Configuration Management
-
-- Use a centralized configuration module
-- Support different environments (dev, test, prod)
-- Allow parameter overrides for testing
 
 ## Logging
 
@@ -621,54 +499,7 @@ def retry(max_attempts: int = 3, delay: float = 1.0):
 - Update documentation as part of feature development
 - Use MkDocs for project documentation
 
-### MkDocs Setup
 
-```yaml
-# mkdocs.yml
-site_name: Bookmark Manager
-site_description: Intelligent bookmark management with automatic classification
-theme:
-  name: material
-  palette:
-    primary: blue
-    accent: deep orange
-  features:
-    - navigation.instant
-    - navigation.tracking
-    - navigation.sections
-    - content.code.copy
-
-markdown_extensions:
-  - admonition
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-
-plugins:
-  - search
-  - mkdocstrings:
-      handlers:
-        python:
-          paths: [bookmarkmanager]
-          options:
-            show_source: true
-
-nav:
-  - Home: index.md
-  - User Guide:
-      - Getting Started: user-guide/getting-started.md
-      - Command Line Interface: user-guide/cli.md
-      - Telegram Bot: user-guide/telegram.md
-  - Developer Guide:
-      - Architecture: dev-guide/architecture.md
-      - Contributing: dev-guide/contributing.md
-  - API Reference: reference/
-  - Changelog: changelog.md
-```
 
 ### Documentation Standards
 
@@ -677,14 +508,14 @@ nav:
 - Keep documentation up to date with code changes
 - Use admonitions for important notes
 
-```markdown
+```
 # Command Line Interface
 
 The bookmark manager provides a command line interface for adding, searching, and managing bookmarks.
 
 ## Basic Usage
 
-```bash
+
 # Add a bookmark
 bookmark add https://example.com
 
@@ -693,7 +524,7 @@ bookmark search "machine learning"
 
 # List recent bookmarks
 bookmark list --limit 10
-```
+
 
 !!! note
     All commands support the `--help` flag for more information.
@@ -808,33 +639,6 @@ def test_end_to_end_bookmark_processing(temp_db):
 - Aim for at least 80% code coverage
 - Configure coverage reporting
 
-```toml
-# pyproject.toml
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = "test_*.py"
-python_functions = "test_*"
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration tests",
-]
-
-[tool.coverage.run]
-source = ["bookmark_manager"]
-omit = [
-    "*/tests/*",
-    "*/__init__.py",
-]
-
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "raise NotImplementedError",
-    "if __name__ == .__main__.:",
-]
-```
-
 ## Security Best Practices
 
 ### Dependency Scanning
@@ -842,60 +646,11 @@ exclude_lines = [
 - Use tools to scan for vulnerabilities in dependencies
 - Update dependencies regularly
 
-```yaml
-# .github/workflows/dependency-review.yml
-name: Dependency Review
-on: [pull_request]
-
-permissions:
-  contents: read
-
-jobs:
-  dependency-review:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Dependency Review
-        uses: actions/dependency-review-action@v2
-```
-
 ### Code Security Scanning
 
 - Use security scanning tools to detect potential vulnerabilities
 - Include security checks in CI/CD pipeline
 
-```yaml
-# .github/workflows/security.yml
-name: Security Scan
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  schedule:
-    - cron: '0 0 * * 0'  # Run weekly
-
-jobs:
-  security-scan:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    - name: Install dependencies
-      run: |
-        pip install bandit safety
-    - name: Run Bandit
-      run: |
-        bandit -r bookmarkmanager/ -x tests/
-    - name: Run Safety
-      run: |
-        safety check
-```
 
 ### Input Validation
 
