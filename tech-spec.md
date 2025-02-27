@@ -24,7 +24,7 @@ This technical specification serves as the definitive guide for development prac
 
 - Follow [PEP 8](https://www.python.org/dev/peps/pep-0008/) style guidelines
 - Use 4 spaces for indentation (no tabs)
-- Limit lines to 120 characters 
+- Limit lines to 120 characters
 - Use snake_case for functions and variables, PascalCase for classes
 
 ### Naming Conventions
@@ -81,15 +81,15 @@ def get_bookmark_by_id(bookmark_id: int) -> Optional[Dict[str, Any]]:
 ```python
 def classify_bookmark(url: str, title: str, content: str) -> List[str]:
     """Classify a bookmark into categories using the LLM.
-    
+
     Args:
         url: The bookmark URL
         title: The page title
         content: The page content
-        
+
     Returns:
         List of category tags
-        
+
     Raises:
         ClassificationError: If classification fails
     """
@@ -416,32 +416,32 @@ from logging.handlers import RotatingFileHandler
 
 def setup_logging(app_name: str, log_level: str = "INFO") -> None:
     """Configure application logging.
-    
+
     Args:
         app_name: Application name for log identification
         log_level: Minimum log level to capture
     """
     log_dir = os.environ.get("LOG_DIR", "./logs")
     os.makedirs(log_dir, exist_ok=True)
-    
+
     # Convert string level to logging constant
     numeric_level = getattr(logging, log_level.upper(), logging.INFO)
-    
+
     # Configure root logger
     logger = logging.getLogger()
     logger.setLevel(numeric_level)
-    
+
     # Create formatters
     detailed_formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s"
     )
     simple_formatter = logging.Formatter("%(levelname)s - %(message)s")
-    
+
     # Configure console handler
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(numeric_level)
     console_handler.setFormatter(simple_formatter)
-    
+
     # Configure file handler
     file_handler = RotatingFileHandler(
         os.path.join(log_dir, f"{app_name}.log"),
@@ -450,7 +450,7 @@ def setup_logging(app_name: str, log_level: str = "INFO") -> None:
     )
     file_handler.setLevel(numeric_level)
     file_handler.setFormatter(detailed_formatter)
-    
+
     # Add handlers to root logger
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
@@ -466,10 +466,10 @@ logger = logging.getLogger(__name__)
 
 def process_bookmark(url: str) -> bool:
     """Process a bookmark URL.
-    
+
     Args:
         url: The bookmark URL to process
-        
+
     Returns:
         True if successful, False otherwise
     """
@@ -539,13 +539,13 @@ from bookmarkmanager.exceptions import NetworkError, DatabaseError
 
 def save_bookmark(url: str) -> int:
     """Save a bookmark to the database.
-    
+
     Args:
         url: The URL to save
-        
+
     Returns:
         The ID of the saved bookmark
-        
+
     Raises:
         NetworkError: If fetching the URL fails
         DatabaseError: If saving to database fails
@@ -555,7 +555,7 @@ def save_bookmark(url: str) -> int:
     except requests.RequestException as e:
         logger.error("Network error fetching %s: %s", url, str(e))
         raise NetworkError(f"Failed to fetch URL: {url}") from e
-        
+
     try:
         bookmark_id = db.insert_bookmark(url, metadata)
         return bookmark_id
@@ -600,12 +600,12 @@ def retry(max_attempts: int = 3, delay: float = 1.0):
                     attempts += 1
                     if attempts == max_attempts:
                         logger.error(
-                            "Failed after %d attempts: %s", 
+                            "Failed after %d attempts: %s",
                             max_attempts, str(e)
                         )
                         raise
                     logger.warning(
-                        "Attempt %d failed, retrying in %.1f seconds", 
+                        "Attempt %d failed, retrying in %.1f seconds",
                         attempts, delay
                     )
                     time.sleep(delay)
@@ -727,14 +727,14 @@ def test_classify_tech_content(classifier):
     url = "https://example.com/tech-article"
     title = "Python Programming Guide"
     description = "Learn how to program in Python with this guide"
-    
+
     # When
     result = classifier.classify(url, title, description)
-    
+
     # Then
     assert "Tech" in result["categories"]
     assert "programming" in result["tags"]
-    
+
 @patch("bookmarkmanager.models.classifier.AutoTokenizer")
 @patch("bookmarkmanager.models.classifier.AutoModelForSequenceClassification")
 def test_initialization_caches_model(mock_model, mock_tokenizer, tmp_path):
@@ -742,10 +742,10 @@ def test_initialization_caches_model(mock_model, mock_tokenizer, tmp_path):
     # Given
     cache_dir = tmp_path / "model_cache"
     cache_dir.mkdir()
-    
+
     # When
     classifier = DistilBERTClassifier(cache_dir=str(cache_dir))
-    
+
     # Then
     assert mock_tokenizer.from_pretrained.called
     assert mock_model.from_pretrained.called
@@ -777,7 +777,7 @@ def test_end_to_end_bookmark_processing(temp_db):
     """Test the entire bookmark processing pipeline."""
     # Given a test URL
     test_url = "https://python.org"
-    
+
     # When we process it through the pipeline
     metadata = extract_metadata(test_url)
     classifier = DistilBERTClassifier()
@@ -790,13 +790,13 @@ def test_end_to_end_bookmark_processing(temp_db):
         description=metadata["description"]
     )
     temp_db.add_tags(bookmark_id, classification["tags"])
-    
+
     # Then we can retrieve it with expected metadata
     bookmark = temp_db.get_bookmark_by_id(bookmark_id)
     assert bookmark is not None
     assert bookmark["url"] == test_url
     assert bookmark["title"] == metadata["title"]
-    
+
     # And we can find it by tag
     results = temp_db.search_by_tag(classification["tags"][0])
     assert len(results) > 0
@@ -910,10 +910,10 @@ from urllib.parse import urlparse
 
 def validate_url(url: str) -> bool:
     """Validate if string is a proper URL.
-    
+
     Args:
         url: The URL to validate
-        
+
     Returns:
         True if valid, False otherwise
     """
@@ -928,7 +928,7 @@ def add_bookmark(url: str) -> int:
     """Add a bookmark to the database."""
     if not validate_url(url):
         raise ValueError("Invalid URL format")
-        
+
     # Proceed with validated URL
 ```
 

@@ -115,7 +115,7 @@ sequenceDiagram
 
     User->>Interface: Submit search query
     Interface->>Search: Process search request
-    
+
     alt Text Search
         Search->>DB: Perform FTS query
     else Tag-based Search
@@ -125,7 +125,7 @@ sequenceDiagram
         Classifier-->>Search: Return embedding
         Search->>DB: Find similar embeddings
     end
-    
+
     DB-->>Search: Return matching bookmarks
     Search->>Search: Rank results
     Search-->>Interface: Return formatted results
@@ -147,7 +147,7 @@ sequenceDiagram
     Interface->>Importer: Process import file
     Importer->>Importer: Parse file based on source
     Importer->>Processor: Process extracted URLs
-    
+
     loop For each URL
         Processor->>Processor: Fetch missing metadata
         Processor->>Classifier: Classify content
@@ -155,7 +155,7 @@ sequenceDiagram
         Processor->>DB: Store bookmark & tags
         DB-->>Processor: Confirm storage
     end
-    
+
     Importer-->>Interface: Return import summary
     Interface-->>User: Display import results
 ```
@@ -249,7 +249,7 @@ graph TD
 erDiagram
     BOOKMARKS ||--o{ BOOKMARK_TAGS : has
     TAGS ||--o{ BOOKMARK_TAGS : has
-    
+
     BOOKMARKS {
         int id PK
         string url
@@ -259,14 +259,14 @@ erDiagram
         string content_snippet
         string source
     }
-    
+
     TAGS {
         int id PK
         string name
         string category
         boolean auto_generated
     }
-    
+
     BOOKMARK_TAGS {
         int bookmark_id FK
         int tag_id FK
