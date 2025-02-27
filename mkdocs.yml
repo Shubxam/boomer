@@ -1,0 +1,52 @@
+site_name: bookmark-manager
+repo_url: https://github.com/shubxam/bookmark-manager
+site_url: https://shubxam.github.io/bookmark-manager
+site_description: A command-line and Telegram-based bookmark management system that automatically categorizes links, supports various import methods, and provides powerful search capabilities. The system uses local LLMs for classification to maintain privacy while enabling efficient bookmark organization.
+site_author: Shubham Soni
+edit_uri: edit/main/docs/
+repo_name: shubxam/bookmark-manager
+copyright: Maintained by <a href="https://shubxam.com">shubxam</a>.
+
+nav:
+  - Home: index.md
+  - Modules: modules.md
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: ["src/bookmark_manager"]
+theme:
+  name: material
+  feature:
+    tabs: true
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/shubxam/bookmark-manager
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/bookmark-manager
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
