@@ -1,6 +1,28 @@
+"""
+Database module for the Bookmark Manager application.
+
+This module provides the core functionality for storing and retrieving bookmarks.
+It implements a SQLite-based persistence layer with support for full-text search,
+tagging, and bookmark categorization.
+
+Classes:
+    DuplicateBookmarkError: Custom exception for duplicate bookmark entries
+    BookmarkDatabase: Main database handler for bookmark operations
+
+Database Schema:
+    - bookmarks: Stores bookmark metadata (URL, title, description, etc.)
+    - tags: Stores available tags for categorizing bookmarks
+    - bookmark_tags: Junction table linking bookmarks to tags
+    - bookmark_fts: Full-text search virtual table for efficient text searching
+"""
+
 import contextlib
+import os
 import sqlite3
+import sys
 from datetime import datetime
+
+sys.path.append(os.getcwd())
 
 from config import DB_FILE
 
@@ -12,7 +34,19 @@ class DuplicateBookmarkError(ValueError):
 
 
 class BookmarkDatabase:
+    """Manages bookmark storage and retrieval operations.
+
+    This class provides a database interface for the Bookmark Manager application,
+    handling bookmark CRUD operations, tagging, and text search capabilities.
+    """
+
     def __init__(self, db_file=DB_FILE):
+        """Initialize the database connection and ensure tables exist.
+
+        Args:
+            db_file: Path to the SQLite database file.
+                Defaults to the value specified in config.DB_FILE.
+        """
         self.db_file = db_file
         # Create tables on initialization
         with self.get_connection() as conn:
@@ -20,7 +54,15 @@ class BookmarkDatabase:
 
     @contextlib.contextmanager
     def get_connection(self):
-        """Context manager for database connections"""
+        """Context manager for database connections.
+
+        Creates and manages a database connection that automatically handles
+        commits and rollbacks based on whether operations succeed or fail.
+
+        Yields:
+            An active database connection with row_factory set to sqlite3.Row
+            for dictionary-like access to rows.
+        """
         conn = sqlite3.connect(self.db_file)
         conn.row_factory = sqlite3.Row
         try:
@@ -33,7 +75,15 @@ class BookmarkDatabase:
             conn.close()
 
     def _create_tables(self, conn):
-        """Create necessary database tables if they don't exist"""
+        """Create necessary database tables if they don't exist.
+
+        Sets up the database schema including tables for bookmarks, tags,
+        and the relationship between them. Also configures full-text search
+        capabilities and necessary triggers.
+
+        Args:
+            conn: An active database connection.
+        """
         cursor = conn.cursor()
 
         # Create bookmarks table
@@ -133,7 +183,12 @@ class BookmarkDatabase:
             raise DuplicateBookmarkError() from e
 
     def get_bookmarks(self):
-        """Retrieve all bookmarks from the database"""
+        """Retrieve all bookmarks from the database.
+
+        Returns:
+            A list of sqlite3.Row objects representing bookmarks.
+            Each row can be accessed like a dictionary.
+        """
         try:
             with self.get_connection() as conn:
                 cursor = conn.cursor()
@@ -144,7 +199,17 @@ class BookmarkDatabase:
             return []
 
     def delete_bookmark(self, bookmark_id):
-        """Delete a bookmark by its ID"""
+        """Delete a bookmark by its ID.
+
+        Removes a bookmark entry and all associated data (tags, etc.) from the database.
+        Due to CASCADE constraints, related entries in junction tables will also be removed.
+
+        Args:
+            bookmark_id: The ID of the bookmark to delete
+
+        Returns:
+            True if the bookmark was successfully deleted, False otherwise
+        """
         try:
             with self.get_connection() as conn:
                 cursor = conn.cursor()
@@ -155,7 +220,18 @@ class BookmarkDatabase:
             return False
 
     def search_bookmarks(self, query):
-        """Search bookmarks using full-text search"""
+        """Search bookmarks using full-text search.
+
+        Performs a search across bookmark titles, descriptions, and content snippets
+        using SQLite's FTS5 extension for efficient full-text search capability.
+
+        Args:
+            query: The search query to find matching bookmarks
+
+        Returns:
+            A list of sqlite3.Row objects representing matching bookmarks,
+            ordered by relevance rank
+        """
         try:
             with self.get_connection() as conn:
                 cursor = conn.cursor()
@@ -174,3 +250,14 @@ class BookmarkDatabase:
         except Exception as e:
             print(f"Error searching bookmarks: {e}")
             return []
+
+
+if __name__ == "__main__":
+    # Example usage
+    db = BookmarkDatabase()
+    db.add_bookmark("Example Title", "http://example.com", "Example Description")
+    bookmarks = db.get_bookmarks()
+    for bookmark in bookmarks:
+        print(dict(bookmark))
+    db.delete_bookmark(1)
+    print(db.get_bookmarks())
