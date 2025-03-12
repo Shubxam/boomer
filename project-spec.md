@@ -550,6 +550,5 @@ A command-line and Telegram-based bookmark management system that automatically 
 - **Development Environment**: Python 3.10+, SQLite
 - **Libraries**: Click, Transformers, python-telegram-bot, BeautifulSoup, Requests
 - **Models**: DistilBERT (basic), Phi-3 Mini or Gemma 2B (advanced)
-- **Computing Resources**: Local development with at least 8GB RAM, 4 cores
 
 This specification provides a comprehensive, step-by-step blueprint for building the Bookmark Manager, with carefully sized implementation steps that balance testability with meaningful progress.
