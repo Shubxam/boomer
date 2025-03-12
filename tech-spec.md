@@ -3,10 +3,10 @@
 ## Table of Contents
 
 1. [Introduction](#introduction)
-2. [Python Idiomatic Practices](#python-idiomatic-practices)
-3. [Version Control Guidelines](#version-control-guidelines)
-4. [Dependency Management with UV](#dependency-management-with-uv)
-5. [Code Quality Assurance](#code-quality-assurance)
+2. [Tech Stack](#tech-stack)
+3. [Python Idiomatic Practices](#python-idiomatic-practices)
+4. [Version Control Guidelines](#version-control-guidelines)
+5. [Dependency Management with UV](#dependency-management-with-uv)
 6. [Environment Configuration](#environment-configuration)
 7. [Logging](#logging)
 8. [Exception Handling](#exception-handling)
@@ -17,6 +17,42 @@
 ## Introduction
 
 This technical specification serves as the definitive guide for development practices on the Bookmark Manager project. All contributors should adhere to these guidelines to ensure code consistency, maintainability, and quality.
+
+## Tech Stack
+- **Programming Language**: Python 3.10+
+- **Frameworks**:
+  - [Click](https://click.palletsprojects.com/) for command-line interface
+  - [Transformers](https://huggingface.co/docs/transformers/index) for machine learning model integration
+  - [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) for HTML parsing
+  - [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot) for Telegram bot integration
+  - [Requests](https://docs.python-requests.org/en/latest/) for HTTP requests
+- **LLM Models**:
+  - [DistilBERT](https://huggingface.co/transformers/model_doc/distilbert.html) for text classification
+- **Database**: SQLite for local storage
+- **Testing**:
+  - [pytest](https://docs.pytest.org/en/stable/) for unit testing
+  - [pytest-cov](https://pytest-cov.readthedocs.io/en/latest/) for coverage reporting
+- **Documentation**:
+  - [MkDocs](https://www.mkdocs.org/) for project documentation
+    - [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) for theme
+  - [Markdown](https://www.markdownguide.org/) for documentation files
+- **Dependency Management**:
+  - [UV](https://docs.astral.sh/uv/) for package management
+- **Version Control**:
+  - [Git](https://git-scm.com/) for source code management
+- **Code Quality**:
+  - [ruff](https://beta.ruff.rs/docs/) for linting
+  - [black](https://black.readthedocs.io/en/stable/) for code formatting
+- **Continuous Integration**:
+  - [GitHub Actions](https://docs.github.com/en/actions) for CI/CD workflows
+- **Secrets Management**:
+  - [python-dotenv](https://pypi.org/project/python-dotenv/) for local environment variables
+- **Logging**:
+  - [logging](https://docs.python.org/3/library/logging.html) for application logging
+
+### External API Integrations
+- [Telegram Bot API](https://core.telegram.org/bots/api) for user notifications
+- [Link Preview API](https://docs.linkpreview.net/) for metadata extraction
 
 ## Python Idiomatic Practices
 
@@ -149,16 +185,6 @@ Closes #42
 I added some stuff for the bookmark system and fixed bugs
 ```
 
-### Pull Request Guidelines
-
-- Create PR against the `main` branch
-- Use the PR template
-- Include detailed description of changes
-- Link to relevant issues
-- Ensure all CI checks pass
-- Request review from at least one team member
-- PRs should ideally represent a single logical change
-
 ## Dependency Management with UV
 
 ### Setup
@@ -227,11 +253,6 @@ uv add requests
 # Upgrade a package
 uv sync --upgrade-package beautifulsoup4
 ```
-
-## Code Quality Assurance
-
-- Use Ruff for linting and formatting
-- Set up pre-commit hooks to ensure code quality before committing
 
 ## Environment Configuration
 
@@ -498,8 +519,8 @@ def retry(max_attempts: int = 3, delay: float = 1.0):
 - Keep documentation close to the code
 - Update documentation as part of feature development
 - Use MkDocs for project documentation
-
-
+- Use Markdown for documentation files
+- Keep the documentation structured and consistent.
 
 ### Documentation Standards
 
@@ -508,7 +529,8 @@ def retry(max_attempts: int = 3, delay: float = 1.0):
 - Keep documentation up to date with code changes
 - Use admonitions for important notes
 
-```
+
+```markdown
 # Command Line Interface
 
 The bookmark manager provides a command line interface for adding, searching, and managing bookmarks.
