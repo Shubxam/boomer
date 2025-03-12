@@ -1,16 +1,40 @@
+import contextlib
 import sqlite3
+from datetime import datetime
 
 from config import DB_FILE
 
 
+class DuplicateBookmarkError(ValueError):
+    """Exception raised when attempting to add a bookmark that already exists."""
+
+    pass
+
+
 class BookmarkDatabase:
     def __init__(self, db_file=DB_FILE):
-        self.conn = sqlite3.connect(db_file)
-        self.conn.row_factory = sqlite3.Row
-        self._create_tables()
+        self.db_file = db_file
+        # Create tables on initialization
+        with self.get_connection() as conn:
+            self._create_tables(conn)
 
-    def _create_tables(self):
-        cursor = self.conn.cursor()
+    @contextlib.contextmanager
+    def get_connection(self):
+        """Context manager for database connections"""
+        conn = sqlite3.connect(self.db_file)
+        conn.row_factory = sqlite3.Row
+        try:
+            yield conn
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
+        finally:
+            conn.close()
+
+    def _create_tables(self, conn):
+        """Create necessary database tables if they don't exist"""
+        cursor = conn.cursor()
 
         # Create bookmarks table
         cursor.execute("""
@@ -57,28 +81,96 @@ class BookmarkDatabase:
             )
         """)
 
-        self.conn.commit()
+        # Create triggers to keep FTS index in sync with bookmarks table
+        # Trigger for new bookmarks
+        cursor.execute("""
+            CREATE TRIGGER IF NOT EXISTS bookmarks_ai AFTER INSERT ON bookmarks BEGIN
+                INSERT INTO bookmark_fts(rowid, title, description, content_snippet)
+                VALUES (new.id, new.title, new.description, new.content_snippet);
+            END;
+        """)
 
-    def add_bookmark(self, title, url):
-        cursor = self.conn.cursor()
-        cursor.execute(
-            """
-            INSERT INTO bookmarks (title, url)
-            VALUES (?, ?)
-        """,
-            (title, url),
-        )
-        self.conn.commit()
+        # Trigger for updated bookmarks
+        cursor.execute("""
+            CREATE TRIGGER IF NOT EXISTS bookmarks_au AFTER UPDATE ON bookmarks BEGIN
+                UPDATE bookmark_fts SET
+                    title = new.title,
+                    description = new.description,
+                    content_snippet = new.content_snippet
+                WHERE rowid = old.id;
+            END;
+        """)
+
+        # Trigger for deleted bookmarks
+        cursor.execute("""
+            CREATE TRIGGER IF NOT EXISTS bookmarks_ad AFTER DELETE ON bookmarks BEGIN
+                DELETE FROM bookmark_fts WHERE rowid = old.id;
+            END;
+        """)
+
+        # Initial population of FTS table if it might be empty
+        # but bookmarks table has data (handles existing databases)
+        cursor.execute("""
+            INSERT OR IGNORE INTO bookmark_fts(rowid, title, description, content_snippet)
+            SELECT id, title, description, content_snippet FROM bookmarks
+        """)
+
+    def add_bookmark(self, title, url, description=None, content_snippet=None, source=None):
+        """Add a new bookmark to the database"""
+        try:
+            with self.get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute(
+                    """
+                    INSERT INTO bookmarks (title, url, description, content_snippet, source, date_added)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                    """,
+                    (title, url, description, content_snippet, source, datetime.now()),
+                )
+                return cursor.lastrowid
+        except sqlite3.IntegrityError as e:
+            # Handle unique constraint violation
+            raise DuplicateBookmarkError() from e
 
     def get_bookmarks(self):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM bookmarks")
-        return cursor.fetchall()
+        """Retrieve all bookmarks from the database"""
+        try:
+            with self.get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM bookmarks")
+                return cursor.fetchall()
+        except Exception as e:
+            print(f"Error retrieving bookmarks: {e}")
+            return []
 
     def delete_bookmark(self, bookmark_id):
-        cursor = self.conn.cursor()
-        cursor.execute("DELETE FROM bookmarks WHERE id = ?", (bookmark_id,))
-        self.conn.commit()
+        """Delete a bookmark by its ID"""
+        try:
+            with self.get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("DELETE FROM bookmarks WHERE id = ?", (bookmark_id,))
+                return cursor.rowcount > 0
+        except Exception as e:
+            print(f"Error deleting bookmark: {e}")
+            return False
 
-    def close(self):
-        self.conn.close()
+    def search_bookmarks(self, query):
+        """Search bookmarks using full-text search"""
+        try:
+            with self.get_connection() as conn:
+                cursor = conn.cursor()
+                # Using the FTS5 table to perform the search
+                cursor.execute(
+                    """
+                    SELECT b.*
+                    FROM bookmark_fts fts
+                    JOIN bookmarks b ON fts.rowid = b.id
+                    WHERE bookmark_fts MATCH ?
+                    ORDER BY rank
+                """,
+                    (query,),
+                )
+                return cursor.fetchall()
+        except Exception as e:
+            print(f"Error searching bookmarks: {e}")
+            return []
