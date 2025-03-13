@@ -1,53 +1,67 @@
-Agent Coding Guidelines: Bookmark Manager App
+<AgentMetaPrompt>
+    <ProjectContext>
+        <Title>Python Project Development Guide</Title>
+        <Description>Guide for AI agents assisting with Python project development with emphasis on rapid iteration and shipping features.</Description>
+        <OutcomeDefinition>Feature-complete, well-documented Python applications with appropriate test coverage and adherence to project standards.</OutcomeDefinition>
+    </ProjectContext>
 
-1. Project Context
-	1. final outcome definition: A command-line and Telegram-based bookmark management system that automatically categorizes links, supports various import methods, and provides powerful search capabilities. The system uses local LLMs for classification to maintain privacy while enabling efficient bookmark organization.
-	2. tech-stack/coding-guidelines requirements : refer to [Tech Spec](../tech-spec.md)
-	3. project domain specific instructions / constraints
-2. core principles: objectives that LLM must follow
-	1. keep the task objective (why) in mind
-	2. always immediately clarify when in doubt
-	3. code readability and maintainability
-	4. always reuse components / avoid redundent code
-	5. writing optimized (readable) code (e.g. vectorized operations instead of loops)
-	6. strict adherence to coding style [Tech Spec](../tech-spec.md)
-	7. secure handling of sensitive info
-	8. Documentation as Code
-3. task execution framework: How to execute a given task
-	1. perform task understanding and show understanding
-	2. Development phase
-		1. modular approach
-		2. iterative development
-		3. efficient error handling
-	3. Validation Phase: self review for correctness and adherence to guidelines
-	4. documentation
-		1. documentation as a code approach
-		2. file-level/module description in [architecture.md](../architecture.md)
-		3. For *important decisions or complex logic*, add comments *directly in the code* to explain the reasoning (for future reference, including your own).
-	5. testing
-		1. For each function you write, also write a corresponding unit test.
-		2. undertake testing best practices such that code is validated but not too much time is spent on it as this is not a production grade software and shipping is more important than perfection.
-4. Post Completion Protocol
-	1. Ask user if task was successfully completed
-	2. update [architecture.md](../architecture.md) and other documentation if necessary
-	3. add task details to a [agent-project-log.md](../agent-project-log.md) file
-		1. purpose of file: documenting bugs/features/context/important decisions/retrospective analysis for future reference (knowledge sharing) of agent and other maintainers.
-		2. where to log: project root folder
-		3. when to log: after successful completion of each assigned task
-		4. how to log
-			1. add current timestamp with `date +"%Y-%m-%d %H:%M:%S"` bash command
-			2. document in markdown format
-			3. sort by date desc, i.e. append to top
-		5. what to log:
-			4. decision taken
-			5. type: bug-fix / new-feature
-			6. bug/issue solved
-			7. learning done
-			8. gotchas / reminders
-		6. example
-> 	## [YYYY-MM-DD HH:MM:SS] Task Summary
-> 	- **Type**: 🐛 Bug Fix | ✨ New Feature
-> 	- **Changes**: Brief technical description
-> 	- **Decisions**: Architectural/security choices
-> 	- **Gotchas**: "Beware of X when modifying Y"
-> 	- **Learnings**: "Discovered Z about framework"
+    <CorePrinciples>
+        <Principle id="1">Keep the task objective (why) in mind throughout development</Principle>
+        <Principle id="2">Clarify immediately when requirements are ambiguous</Principle>
+        <Principle id="3">Prioritize code readability and maintainability</Principle>
+        <Principle id="4">Reuse components and avoid redundant code</Principle>
+        <Principle id="5">Write optimized code (e.g., vectorized operations over loops when appropriate)</Principle>
+        <Principle id="6">Adhere to project coding standards from the tech-spec</Principle>
+        <Principle id="7">Handle sensitive information securely</Principle>
+        <Principle id="8">Treat documentation as code</Principle>
+        <Principle id="9">Ship features quickly over pursuing perfection</Principle>
+    </CorePrinciples>
+
+    <TaskExecutionFramework>
+        <Phase name="Understanding">
+            <Step>Analyze requirements thoroughly</Step>
+            <Step>Demonstrate understanding by summarizing the task</Step>
+            <Step>Identify potential challenges or ambiguities</Step>
+        </Phase>
+
+        <Phase name="Development">
+            <Step>Design modular components</Step>
+            <Step>Use iterative development approach</Step>
+            <Step>Implement robust error handling</Step>
+            <Step>Apply project coding standards</Step>
+        </Phase>
+
+        <Phase name="Validation">
+            <Step>Review code for correctness and adherence to guidelines</Step>
+            <Step>Identify potential edge cases</Step>
+            <Step>Ensure error handling is comprehensive</Step>
+        </Phase>
+
+        <Phase name="Documentation">
+            <Step>Document code using docstrings (Google style)</Step>
+            <Step>Update architecture documentation for significant changes</Step>
+            <Step>Add explanatory comments for complex logic</Step>
+        </Phase>
+
+        <Phase name="Testing">
+            <Step>Write tests for major components and critical paths</Step>
+            <Step>Ensure test coverage meets minimum standards</Step>
+            <Step>Validate functionality works as expected</Step>
+        </Phase>
+    </TaskExecutionFramework>
+
+    <PostCompletionProtocol>
+        <Step>Verify task completion with user</Step>
+        <Step>Update project documentation</Step>
+        <Step>Log completed work in project log with the following format:
+            <LogFormat>
+## [TIMESTAMP] Task Summary
+- **Type**: 🐛 Bug Fix | ✨ New Feature
+- **Changes**: Brief technical description
+- **Decisions**: Architectural/security choices
+- **Gotchas**: "Beware of X when modifying Y"
+- **Learnings**: "Discovered Z about framework"
+            </LogFormat>
+        </Step>
+    </PostCompletionProtocol>
+</AgentMetaPrompt>
