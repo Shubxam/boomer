@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TechnicalSpecification>
+    <Title>Python Project Technical Specification</Title>
+
+    <Overview>
+        This specification defines coding standards, development practices, and technical guidelines for Python projects. The emphasis is on rapid development while maintaining quality through appropriate testing and documentation.
+    </Overview>
+
+    <TechStack>
+        <CoreTechnologies>
+            <Technology name="Python Version" version="3.10+" />
+            <Technology name="Testing Framework" description="pytest with pytest-cov for coverage" />
+            <Technology name="Documentation" description="MkDocs with Material theme" />
+            <Technology name="Package Management" tool="UV" />
+            <Technology name="Code Quality" description="ruff for linting, black for formatting" />
+            <Technology name="Version Control" tool="Git" />
+            <Technology name="CI/CD" tool="GitHub Actions" />
+            <Technology name="Deployment" platforms="Heroku/GitHub Pages" />
+        </CoreTechnologies>
+
+        <ProjectSpecificLibraries>
+            <Library category="Command Line" name="Click" />
+            <Library category="Data Processing" name="BeautifulSoup, Transformers" />
+            <Library category="API Integration" name="Requests, python-telegram-bot" />
+            <Library category="Database" name="SQLite" />
+            <Library category="Config Management" name="python-dotenv" />
+            <Library category="Logging" name="Python standard library logging" />
+        </ProjectSpecificLibraries>
+    </TechStack>
+
+    <DevelopmentStandards>
+        <CodeStyle>
+            <Guideline>Follow PEP 8 conventions</Guideline>
+            <Guideline>Use 4 spaces for indentation</Guideline>
+            <Guideline>120 character line length maximum</Guideline>
+            <Guideline>Use black for automatic formatting</Guideline>
+            <Guideline>Apply ruff for linting</Guideline>
+        </CodeStyle>
+
+        <NamingConventions>
+            <Convention type="Functions/Variables" style="snake_case" />
+            <Convention type="Classes" style="PascalCase" />
+            <Convention type="Constants" style="UPPER_SNAKE_CASE" />
+            <Convention type="Private methods/variables" style="_leading_underscore" />
+            <Convention type="Test files" style="test_*.py" />
+        </NamingConventions>
+
+        <TypeHints>
+            <Guideline>Use type hints for all function parameters and return values</Guideline>
+            <Guideline>Use Optional[] for nullable values</Guideline>
+            <Guideline>Use Union[] (or | in Python 3.10+) for multiple types</Guideline>
+        </TypeHints>
+
+        <Documentation>
+            <Guideline>Use Google-style docstrings for all public functions and classes</Guideline>
+            <Guideline>Document parameter types, return values, and exceptions</Guideline>
+            <Guideline>Add high-level module documentation</Guideline>
+            <Guideline>Keep architecture.md updated with component relationships</Guideline>
+            <Guideline>Use inline comments for complex logic only</Guideline>
+        </Documentation>
+
+        <Testing>
+            <Guideline>Test major components and critical paths</Guideline>
+            <Guideline>Aim for minimum 70% test coverage</Guideline>
+            <Guideline>Use pytest fixtures for test setup</Guideline>
+            <Guideline>Mock external dependencies and API calls</Guideline>
+            <Guideline>Run tests as part of CI pipeline</Guideline>
+        </Testing>
+
+        <ErrorHandling>
+            <Guideline>Use specific exception types over generic exceptions</Guideline>
+            <Guideline>Log exceptions with context information</Guideline>
+            <Guideline>Provide helpful error messages</Guideline>
+            <Guideline>Handle expected errors gracefully</Guideline>
+        </ErrorHandling>
+
+        <Security>
+            <Guideline>Store secrets in environment variables</Guideline>
+            <Guideline>Sanitize user inputs</Guideline>
+            <Guideline>Use parameterized queries for database operations</Guideline>
+            <Guideline>Keep dependencies updated</Guideline>
+        </Security>
+
+        <Database>
+            <Guideline>Use SQLite for local storage</Guideline>
+            <Guideline>Define clear schema with appropriate constraints</Guideline>
+            <Guideline>Use migrations for schema changes</Guideline>
+            <Guideline>Include indexes for frequently queried fields</Guideline>
+        </Database>
+
+        <Logging>
+            <Guideline>Use structured logging</Guideline>
+            <Guideline>Include contextual information</Guideline>
+            <Guideline>Apply appropriate log levels</Guideline>
+            <Guideline>Configure logging to file for production</Guideline>
+        </Logging>
+
+        <VersionControl>
+            <Guideline>Use feature branches</Guideline>
+            <Guideline>Write descriptive commit messages</Guideline>
+            <Guideline>Reference issue numbers in commits</Guideline>
+            <Guideline>Create pull requests for non-trivial changes</Guideline>
+        </VersionControl>
+
+        <CICD>
+            <Guideline>Run tests on pull requests</Guideline>
+            <Guideline>Enforce code quality checks</Guideline>
+            <Guideline>Build and test deployment packages</Guideline>
+            <Guideline>Automate deployment process</Guideline>
+        </CICD>
+    </DevelopmentStandards>
+
+    <DevelopmentWorkflow>
+        <Step number="1">Feature definition/bug identification</Step>
+        <Step number="2">Local development with testing</Step>
+        <Step number="3">Code quality checks</Step>
+        <Step number="4">Documentation updates</Step>
+        <Step number="5">Pull request</Step>
+        <Step number="6">Review and merge</Step>
+        <Step number="7">Deployment</Step>
+        <Step number="8">Post-deployment verification</Step>
+    </DevelopmentWorkflow>
+
+    <Deployment>
+        <Guideline>Use containerization when appropriate</Guideline>
+        <Guideline>Configure environment variables for different environments</Guideline>
+        <Guideline>Include health checks for services</Guideline>
+        <Guideline>Set up logging and monitoring</Guideline>
+        <Guideline>Document deployment process</Guideline>
+    </Deployment>
+
+    <Conclusion>
+        This specification serves as the definitive guide for development. All contributors should adhere to these standards to ensure consistency and quality.
+    </Conclusion>
+</TechnicalSpecification>
