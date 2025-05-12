@@ -1,4 +1,6 @@
-# bookmark-manager
+# boomer 
+
+~ [**boo**]kmark-[**m**]anag[**er**]
 
 [![Release](https://img.shields.io/github/v/release/shubxam/bookmark-manager)](https://img.shields.io/github/v/release/shubxam/bookmark-manager)
 [![Build status](https://img.shields.io/github/actions/workflow/status/shubxam/bookmark-manager/main.yml?branch=main)](https://github.com/shubxam/bookmark-manager/actions/workflows/main.yml?query=branch%3Amain)
